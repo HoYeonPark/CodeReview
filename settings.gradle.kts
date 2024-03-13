@@ -1,0 +1,1 @@
+rootProject.name = "hoyeonpark_7324125"
