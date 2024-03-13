@@ -2,10 +2,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Main implements sortTool, AddOnFunction {
+interface sort{
+    public void run(ArrayList<Integer> lst);
+}
+
+class bubbleSort implements sort{
 
     @Override
-    public void bubbleSort(ArrayList<Integer> lst){
+    public void run (ArrayList<Integer> lst){
         for(int cycle = 0 ;cycle < lst.size(); cycle ++) {
             for(int i = 0 ; i < lst.size() - 1 - cycle; i ++) {
                 if(lst.get(i) > lst.get(i + 1)){
@@ -17,12 +21,14 @@ public class Main implements sortTool, AddOnFunction {
             }
         }
     }
+}
 
+class selectionSort implements sort{
     @Override
-    public void SelectionSort(ArrayList<Integer> lst) {
-        for(int i = 0 ; i < lst.size(); i++) {
-            for(int j = i + 1 ; j < lst.size(); j ++) {
-                if(lst.get(i) > lst.get(j)){
+    public void run(ArrayList<Integer> lst) {
+        for (int i = 0; i < lst.size(); i++) {
+            for (int j = i + 1; j < lst.size(); j++) {
+                if (lst.get(i) > lst.get(j)) {
                     int tmp = lst.get(i);
                     lst.set(i, lst.get(j));
                     lst.set(j, tmp);
@@ -30,56 +36,61 @@ public class Main implements sortTool, AddOnFunction {
             }
         }
     }
+}
 
-    @Override
-    public void insertNumber(ArrayList<Integer> lst, int n) {
+class sortPrinter{
+    sort sort;
+    ArrayList<Integer> lst = new ArrayList<>();
+
+    public sortPrinter(ArrayList<Integer> lst) {
+        this.lst = lst;
+    }
+
+    public void insertNumber(int n){
         lst.add(n);
     }
 
-    @Override
-    public int ChooseSort() {
-        System.out.println("Choose your sort.");
-        System.out.println("1. Bubble Sort");
-        System.out.println("2. Selection Sort");
-        System.out.println("3. 취소");
-
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-
-        int timeOut = 100;
-        while(n < 1 || n>3 || timeOut>0){
-            System.out.println("Choose between 1~3 Number. ");
-            n = sc.nextInt();
-            timeOut--;
-        }
-
-        return n;
+    public void chooseSort(sort sort){
+        this.sort = sort;
     }
 
-    @Override
-    public void ChoosingSortExe(ArrayList<Integer> lst, int n) {
-        switch(n){
-            case 1:
-                bubbleSort(lst);
-                break;
-            case 2:
-                SelectionSort(lst);
-                break;
-            default:
-                break;
-        }
+    public void run(){
+        sort.run(lst);
     }
 
-    @Override
-    public void show(ArrayList<Integer> lst) {
+    public void show() {
         System.out.println(lst);
     }
 
+}
+
+public class Main  {
     public static void main(String[] args) {
         ArrayList<Integer> lst = new ArrayList<>(Arrays.asList(3,3,3,2,1,1,2,3,2,1,2,3,1,2,3,2,1,5,5,2,1,7));
         //selectionSort(lst);
-        //bubbleSort(lst); 
-        System.out.println(lst);
+        //bubbleSort(lst);
+
+        sortPrinter sPrinter = new sortPrinter(lst);
+        sort bubble = new bubbleSort();
+        sort selection = new selectionSort();
+
+        sPrinter.show();
+        sPrinter.insertNumber(444);
+        sPrinter.show();
+        sPrinter.chooseSort(bubble);
+        sPrinter.show();
+        sPrinter.run();
+        sPrinter.show();
+
+        sPrinter = new sortPrinter(lst);
+        sPrinter.show();
+        sPrinter.insertNumber(666);
+        sPrinter.show();
+        sPrinter.chooseSort(selection);
+        sPrinter.show();
+        sPrinter.run();
+        sPrinter.show();
+
     }
 
 }
